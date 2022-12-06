@@ -50,19 +50,37 @@ app.delete("/tasks/:id",async (req,res)=>{
     }
 })
 
-// if(process.env.NODE_ENV==='production'){
-  const path = require('path')
+// // if(process.env.NODE_ENV==='production'){
+//   const path = require('path')
 
-  app.get('/',(req,res)=>{
-      app.use(express.static(path.resolve(__dirname,'client','build')))
-      res.sendFile(path.resolve(__dirname,'client','build','index.html'))
-  })
-// }
+//   app.get('/',(req,res)=>{
+//       app.use(express.static(path.resolve(__dirname,'client','build')))
+//       res.sendFile(path.resolve(__dirname,'client','build','index.html'))
+//   })
+// // }
+require("dotenv").config();
+const path = require("path");
+
+
+const port = process.env.PORT || 5000;
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname + "/client/build/index.html"),
+      function (err) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  });
+}
 
 databaseconnection();
 
 
-let port = process.env.PORT || 9000;
+// let port = process.env.PORT || 9000;
 app.listen(port, () => {
   console.log(`Server is created with port number ${port}`);
 });
